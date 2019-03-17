@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * Classe para mapear o restaurante no MongoDB
  *
  */
-@Document(collection = "restaurants")
+@Document(collection = "restaurant")
 public final class RestaurantMongo implements Serializable {
 
 	private static final long serialVersionUID = 1L;

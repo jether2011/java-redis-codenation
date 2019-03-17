@@ -38,6 +38,8 @@ public class RestaurantValidationTest {
 
 		ResponseEntity<String> response = restTemplate.getForEntity("/restaurants/findInNeighborhood?x={x}&y={y}", String.class, x, y);
 
+		System.out.println(response);
+		
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody()).isNotNull();
 	}

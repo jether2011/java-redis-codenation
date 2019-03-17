@@ -19,9 +19,11 @@ public class RestaurantServiceImpl implements RestaurantService {
 
 	private final Logger logger = LoggerFactory.getLogger(RestaurantServiceImpl.class);
 	
+	private static final String KEY_NAME = "neighborhood:";
+	
 	@Autowired private NeighborhoodMongoRepository neighborhoodRepository;
 	@Autowired private RestaurantRespository restaurantRespository;
-	@Autowired private RedisTemplate<String, NeighborhoodRedis> redisTemplate;
+	@Autowired private RedisTemplate<String, String> redisTemplate;
 	
 	private ObjectMapper MAPPER;
 	{
@@ -40,8 +42,8 @@ public class RestaurantServiceImpl implements RestaurantService {
 		NeighborhoodMongo found = neighborhoodRepository.findInNeighborhood(x, y);
 		NeighborhoodRedis neighborhoodRedis = null;
 		
-		if(redisTemplate.hasKey(found.getId())) {
-			String json = String.valueOf(this.redisTemplate.opsForHash().get(found.getId(), found.getId()));
+		if(redisTemplate.hasKey(KEY_NAME + found.getId())) {
+			String json = String.valueOf(this.redisTemplate.opsForValue().get(KEY_NAME + found.getId()));
 			try {
 				neighborhoodRedis = MAPPER.readValue(json, NeighborhoodRedis.class);
 			} catch (IOException e) {
@@ -51,7 +53,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 			List<RestaurantMongo> restaurants = restaurantRespository.findAllFromNeighborhood(Objects.requireNonNull(found.getGeometry()));
 			neighborhoodRedis = NeighborhoodRedis.of(found, restaurants);
 			try {
-				this.redisTemplate.opsForHash().put(found.getId(), found.getId(), MAPPER.writeValueAsString(neighborhoodRedis));
+				this.redisTemplate.opsForValue().set(KEY_NAME + found.getId(), MAPPER.writeValueAsString(neighborhoodRedis));
 			} catch (JsonProcessingException e) {
 				logger.error("Error on MAPPER.writeValueAsString! {}", e.getMessage());
 			}

@@ -7,23 +7,21 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.RedisHash;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 
 /**
  * Classe para mapear o bairro no Redis
  *
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.MINIMAL_CLASS, include = As.PROPERTY, property = "@class")
-@JsonSubTypes({
-    @JsonSubTypes.Type(value = RestaurantRedis.class, name = "restaurants")
-})
+@RedisHash("neighborhoods")
 public final class NeighborhoodRedis implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+	
+	@Id
 	@JsonProperty
 	private String id;
 	@JsonProperty

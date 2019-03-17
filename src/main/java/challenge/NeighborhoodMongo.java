@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * Classe para mapear o bairro no MongoDB
  *
  */
-@Document(collection = "neighborhoods")
+@Document(collection = "neighborhood")
 public final class NeighborhoodMongo implements Serializable {
 
 	private static final long serialVersionUID = 1L;

@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,13 +39,10 @@ public class RedisConfig implements Serializable {
 		final RedisTemplate<String, T> template = new RedisTemplate<String, T>();
 		template.setConnectionFactory(redisConnectionFactory());
 		
-		template.setDefaultSerializer(new GenericJackson2JsonRedisSerializer());
-		template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
 		template.setKeySerializer(new StringRedisSerializer());
-        template.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
-        template.setHashKeySerializer(new GenericJackson2JsonRedisSerializer());
-        template.setStringSerializer(new StringRedisSerializer());
-        
+		template.setValueSerializer(new Jackson2JsonRedisSerializer<>(NeighborhoodRedis.class));
+		template.afterPropertiesSet();
+		
 		return template;
 	}
     
