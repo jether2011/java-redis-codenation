@@ -1,2 +1,2 @@
-# java-redis-codenation
-java-redis-codenation
+# Java Redis Codenation
+
