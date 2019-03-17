@@ -1,0 +1,18 @@
+version: '3.3'
+services:
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - '27017:27017'
+    volumes:
+      - "/Users/jether.rodrigues/codenation/db/mongo:/data/db"
+      
+  redis:
+    image: redis
+    container_name: redisdb
+    ports:
+      - '6379:6379'
+    volumes:
+      - "/Users/jether.rodrigues/codenation/db/redis:/data"
+    entrypoint: redis-server --appendonly yes
